@@ -42,12 +42,12 @@ For the model to be effective in real-world applications, it must be capable of 
 Data Source: This project have three sources of data, the first is true(existing) artisanal mine locations from [IPIS Geoserver Map Preview](https://geo.ipisresearch.be/geoserver/Ib/wicket/bookmarkable/org.geoserver.Ib.demo.MapPreviewPage?0). The second is landsat data to generate ndvi loss and variaous band features of a location, the third is human activity data (location of village, natural protected area, road and water way) [Humanitarian Data Exchange](https://data.humdata.org/dataset/central-african-republic-roads) to generate other features of a location. 
 
 ### 1.2 Collect Landsat Data using Lamda Function and Step Function: 
-I use AWS "gsas-landsat" S3 buckets to retrive filtered landsat data of east congo: I used [lambda function](https://github.com/Huiyu1999/Mining-mines/blob/main/lambda_function.py) to filter no cloud cover data to calculate NDVI loss and filter locations with ndvi loss > 0.15 [1], and I also retrive data of different band lenth features of each location. After obtaining the filtered data with band features, the focus was adding other features of distances and matching data with true artisanal mine locations(step 1.3 and step 1.4)
+I use AWS "gsas-landsat" S3 buckets to retrive filtered landsat data of east congo: I used [lambda function](https://github.com/Huiyu1999/Mining-mines/blob/main/code/lambda_function.py) to filter no cloud cover data to calculate NDVI loss and filter locations with ndvi loss > 0.15 [1], and I also retrive data of different band lenth features of each location. After obtaining the filtered data with band features, the focus was adding other features of distances and matching data with true artisanal mine locations(step 1.3 and step 1.4)
 
 I reference a paper from Science of The Total Environment and get the idea that high NDVI(Normalized Difference Vegetation Index) loss indicates a low level of land cover and a high level of human activity, including mining activity. This means that to improve accuracy and reduce data amount, I can get the training database by filtering areas with high NDVI loss. Then, I classify these high human activity areas into mining and non-mining locations. I first begin with calculating NDVI loss; I have two groups of data, reference period data (2003-2005 landsat 8) and observed period data(2020-2023 landsat8). I calculate loss based on the difference in NDVI value betIen the two periods. Then, I filter out locations with NDVI loss greater than 0.15.
 
 
-- to deploy lambda function and step function, please see [step1.ipynb](https://github.com/Huiyu1999/Mining-mines/blob/main/step1-get-data.ipynb)
+- to deploy lambda function and step function, please see [step1.ipynb](https://github.com/Huiyu1999/Mining-mines/blob/main/code/step1-get-data.ipynb)
 
 (Initially, I attempted to use Google Earth Engine to select areas in a specific part of the DRC with NDVI loss > 0.15 [1]. HoIver, this process took a long time without the possibility of parallelization and did not yield many data points (around 4000 points in an area of 4 latitude by 3 longitude)
 
@@ -55,7 +55,7 @@ I reference a paper from Science of The Total Environment and get the idea that 
 I initially want to append other human activity features using pyspark, but due to error with dependencies, I failed to do that intially. Thus I use midway cluster to do add features.
 I calculated the distance to the nearest road or features(Nearest Waterways, Local Roads, Main Roads, Protected Areas, and Villages) using GeoPandas and GIS analysis.
 
-- to add other features, please see [code](https://github.com/Huiyu1999/Mining-mines/blob/main/add_feature_5k_y1.py) This script calculates the distance to various features for NDVI loss points within a 5000-meter radius of mining locations.
+- to add other features, please see [code](https://github.com/Huiyu1999/Mining-mines/blob/main/code/add_feature_5k_y1.py) This script calculates the distance to various features for NDVI loss points within a 5000-meter radius of mining locations.
 
 ### 1.4 Labelling Strategy
 I need to label artisanal mines with ndvi loss greater than 0.15 [1] retrived from the previous step into [true mine](https://github.com/macs30123-s24/final-project-mining-mines/blob/main/Data-preprocessing/Complete-Data/complete_data_y1.csv) and [not mines](https://github.com/macs30123-s24/final-project-mining-mines/blob/main/Data-preprocessing/Complete-Data/complete_data_y0_200k.csv), using data of [true mine location data](https://geo.ipisresearch.be/geoserver/Ib/wicket/bookmarkable/org.geoserver.Ib.demo.MapPreviewPage?0=). (As a result, I added a additional column to data I got from 1.3)
@@ -65,7 +65,7 @@ I need to label artisanal mines with ndvi loss greater than 0.15 [1] retrived fr
    - **Labeling**: Points contained within the circle are labeled as 1, and others as 0.
    - **Radius Used**: 1000 meters and 5000 meters.
    - **Implementation**: Initially attempted on PySpark, but due to environment configuration issues, the process was run on the Midway SSD cluster
--  **to match with existing mine**: [match_with_existing_mine.py](https://github.com/Huiyu1999/Mining-mines/blob/main/match_with_existing_mine.py)
+-  **to match with existing mine**: [match_with_existing_mine.py](https://github.com/Huiyu1999/Mining-mines/blob/main/code/match_with_existing_mine.py)
   - **Description**: This script matches NDVI loss points with existing mine locations and labels them based on their proximity to the mines.
 
 **Justification for Choosing 1000 Meters and 5000 Meters**:
@@ -81,7 +81,7 @@ Using these two radii helps in creating a detailed and comprehensive analysis of
 The results of features and label of each location of east congo are saved to a new CSV file to s3 bucket(bucketname = "africamining"), which includes the potential mining indicator for each NDVI loss point.
 
 ## 2. Machine Learning
-[machine learning and pipeline code](https://github.com/Huiyu1999/Mining-mines/blob/main/ml_2(0814).ipynb)
+[machine learning and pipeline code](https://github.com/Huiyu1999/Mining-mines/blob/main/code/ml_2(0814).ipynb)
 
 After buliding EMR cluster, I use two sample datasets (radius 1km vs 5km) and  logit model, random forest, and neutral network models to train and predict data on Spark Session. I have three main steps: 
 - Step 1: Data Processing and Visualization
@@ -90,9 +90,9 @@ After buliding EMR cluster, I use two sample datasets (radius 1km vs 5km) and  l
 
 Below are confusion matrix of above  machine learning models:
 
-![confusion matrix_1km](https://github.com/Huiyu1999/Mining-mines/blob/main/41716684776_.pic.jpg)
+![confusion matrix_1km](https://github.com/Huiyu1999/Mining-mines/blob/main/code/41716684776_.pic.jpg)
 
-![confusion matrix_5km](https://github.com/Huiyu1999/Mining-mines/blob/main/51716684777_.pic.jpg)
+![confusion matrix_5km](https://github.com/Huiyu1999/Mining-mines/blob/main/code/51716684777_.pic.jpg)
 
   
 ## 3. Conclusion
@@ -129,7 +129,7 @@ In summary, for both radius cutoffs, the Random Forests model demonstrates super
 The analysis considers five key geographic features: waterways, protected areas, main roads, local roads, and village distributions. The following visualizations represent these features:
 
 - the code to generate descirptive visualization:
-- **Congo Visualization**: [Congo-visualization.ipynb](https://github.com/Huiyu1999/Mining-mines/blob/main/Congo-visualization.ipynb).
+- **Congo Visualization**: [Congo-visualization.ipynb](https://github.com/Huiyu1999/Mining-mines/blob/main/code/Congo-visualization.ipynb).
 
 ### Example Visualizations
 
