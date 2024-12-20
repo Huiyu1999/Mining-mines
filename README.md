@@ -134,12 +134,12 @@ The analysis considers five key geographic features: waterways, protected areas,
 ### Example Visualizations
 
 1. **Waterways and Specific Point**
-   ![image](https://github.com/Huiyu1999/African-mining/assets/143442308/226e69b8-1a58-480e-aa24-6b4da9120b3e)
+   ![image](https://github.com/Huiyu1999/Mining-mines/blob/main/waterway.png)
 
    - **Description**: This map shows the distribution of waterways (in blue) in the DRC, with a specific point highlighted in red. It helps in analyzing the proximity of mining locations to water smyces.
 
 2. **Protected Areas and Specific Point**
-   ![image](https://github.com/Huiyu1999/African-mining/assets/143442308/0b9a7219-57f0-416f-bda8-82cf2bb26819)
+   ![image](https://github.com/Huiyu1999/Mining-mines/blob/main/protected%20area.png)
 
    - **Description**: This map displays the protected areas (in green) in the DRC, with a specific point marked in red. It is used to assess the potential impact of mining activities on protected regions.
 
