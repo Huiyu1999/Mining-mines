@@ -5,7 +5,7 @@
 
 The Eastern Congo is a region rich in minerals such as gold, tantalum, and tin, which are vital for various industries worldwide. HoIver, the artisanal mining activities in this area are often unregulated, leading to significant environmental degradation and severe social issues, including human rights abuses and armed conflicts. Monitoring and regulating these activities is crucial for mitigating their negative impacts. Traditional methods of monitoring, such as on-ground inspections, are often impractical due to the region's remote and conflict-prone nature. Therefore, leveraging advanced technologies like satellite imagery and scalable computing methods offers a promising solution to this challenge.
 
-My project focuses on detecting artisan mining activities in Eastern Congo using satellite imagery data from the Landsat dataset hosted on AWS. The primary research problem is to develop an accurate and efficient method for identifying active mining areas using remote sensing techniques. This task involves processing vast amounts of satellite data, which requires substantial computational resmyces. By employing scalable computing methods, I aim to create a model that can be used for continuous monitoring and regulation of mining activities, ultimately contributing to the region's sustainable development.
+My project focuses on detecting artisan mining activities in Eastern Congo using satellite imagery data from the Landsat dataset hosted on AWS. The primary research problem is to develop an accurate and efficient method for identifying active mining areas using remote sensing techniques. This task involves processing vast amounts of satellite data, which requires substantial computational resources. By employing scalable computing methods, I aim to create a model that can be used for continuous monitoring and regulation of mining activities, ultimately contributing to the region's sustainable development.
 
 
 ## Justification for Using Scalable Computing Methods
@@ -26,7 +26,7 @@ For the model to be effective in real-world applications, it must be capable of 
 
 
 - **Data Collection**: Utilize AWS Lambda functions and step function for data collection(read satellite tiffs file using rasterio, calculate NDVI(Normalized Difference Vegetation Index) loss, filter locations with no cloud cover and ndvi loss bigger than 0.15) [1] and store the collected data and band feature in csv format an AWS S3 bucket.
-- **Data Processing**: Process and append the feature data acquired from smyces other than landsat dataset using the Midway cluster (append few feature to orginal dataset). MPI (Message Passing Interface) is used for parallel processing of mining location data to efficiently calculate distances to various geographic features.
+- **Data Processing**: Process and append the feature data acquired from sources other than landsat dataset using the Midway cluster (append few feature to orginal dataset). MPI (Message Passing Interface) is used for parallel processing of mining location data to efficiently calculate distances to various geographic features.
 - **Machine Learning**: Create an Amazon EMR cluster to perform data cleaning, processing, model training, and visualization using AWS PySpark sessions.
 
 ![image](https://github.com/macs30123-s24/final-project-mining-mines/assets/143442308/e7e8e5d0-5f6b-4d44-a078-b29fca80b071)
@@ -39,7 +39,7 @@ For the model to be effective in real-world applications, it must be capable of 
 
 ### 1.1 Data Source
 
-Data Smyce: This project have three sources of data, the first is true(existing) artisanal mine locations from [IPIS Geoserver Map Preview](https://geo.ipisresearch.be/geoserver/Ib/wicket/bookmarkable/org.geoserver.Ib.demo.MapPreviewPage?0). The second is landsat data to generate ndvi loss and variaous band features of a location, the third is human activity data (location of village, natural protected area, road and water way) [Humanitarian Data Exchange](https://data.humdata.org/dataset/central-african-republic-roads) to generate other features of a location. 
+Data Source: This project have three sources of data, the first is true(existing) artisanal mine locations from [IPIS Geoserver Map Preview](https://geo.ipisresearch.be/geoserver/Ib/wicket/bookmarkable/org.geoserver.Ib.demo.MapPreviewPage?0). The second is landsat data to generate ndvi loss and variaous band features of a location, the third is human activity data (location of village, natural protected area, road and water way) [Humanitarian Data Exchange](https://data.humdata.org/dataset/central-african-republic-roads) to generate other features of a location. 
 
 ### 1.2 Collect Landsat Data using Lamda Function and Step Function: 
 I use AWS "gsas-landsat" S3 buckets to retrive filtered landsat data of east congo: I used [lambda function](https://github.com/Huiyu1999/Mining-mines/blob/main/lambda_function.py) to filter no cloud cover data to calculate NDVI loss and filter locations with ndvi loss > 0.15 [1], and I also retrive data of different band lenth features of each location. After obtaining the filtered data with band features, the focus was adding other features of distances and matching data with true artisanal mine locations(step 1.3 and step 1.4)
