@@ -143,15 +143,6 @@ The analysis considers five key geographic features: waterways, protected areas,
 
    - **Description**: This map displays the protected areas (in green) in the DRC, with a specific point marked in red. It is used to assess the potential impact of mining activities on protected regions.
 
-
-## Team Roles 
-
-**Yu Hui**: Processing landsat data as well as related feature using AWS 
-
-**Kevin**:  Data pre-processinng and gnenerate related features.
-
-**Charlotte**: Responsible mainly for training the machine learning model, analyze the performance, and conducting respective visualization.
-
 ## Reference
 
 [1] Hilson, G. (2021). The large footprint of small-scale artisanal gold mining in Ghana. Science of The Total Environment, 778, 146331. https://doi.org/10.1016/j.scitotenv.2021.146331
