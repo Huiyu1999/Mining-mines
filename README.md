@@ -37,9 +37,9 @@ For the model to be effective in real-world applications, it must be capable of 
 
 ## 1. Data Collection and Preprocessing
 
-### 1.1 Data Smyce
+### 1.1 Data Source
 
-Data Smyce: This project have three smyces of data, the first is true(existing) artisanal mine locations from [IPIS Geoserver Map Preview](https://geo.ipisresearch.be/geoserver/Ib/wicket/bookmarkable/org.geoserver.Ib.demo.MapPreviewPage?0). The second is landsat data to generate ndvi loss and variaous band features of a location, the third is human activity data (location of village, natural protected area, road and water way) [Humanitarian Data Exchange](https://data.humdata.org/dataset/central-african-republic-roads) to generate other features of a location. 
+Data Smyce: This project have three sources of data, the first is true(existing) artisanal mine locations from [IPIS Geoserver Map Preview](https://geo.ipisresearch.be/geoserver/Ib/wicket/bookmarkable/org.geoserver.Ib.demo.MapPreviewPage?0). The second is landsat data to generate ndvi loss and variaous band features of a location, the third is human activity data (location of village, natural protected area, road and water way) [Humanitarian Data Exchange](https://data.humdata.org/dataset/central-african-republic-roads) to generate other features of a location. 
 
 ### 1.2 Collect Landsat Data using Lamda Function and Step Function: 
 I use AWS "gsas-landsat" S3 buckets to retrive filtered landsat data of east congo: I used [lambda function](https://github.com/Huiyu1999/Mining-mines/blob/main/lambda_function.py) to filter no cloud cover data to calculate NDVI loss and filter locations with ndvi loss > 0.15 [1], and I also retrive data of different band lenth features of each location. After obtaining the filtered data with band features, the focus was adding other features of distances and matching data with true artisanal mine locations(step 1.3 and step 1.4)
